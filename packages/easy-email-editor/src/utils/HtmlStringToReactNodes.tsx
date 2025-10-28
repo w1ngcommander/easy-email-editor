@@ -49,15 +49,24 @@ export function HtmlStringToReactNodes(
     }
   });
 
-  const reactNode = (
-    <RenderReactNode
-      selector={'0'}
-      node={doc.documentElement}
-      index={0}
-    />
-  );
+  // Instead of rendering the body element itself, render its children
+  // This prevents hydration errors where <body> would be a child of <div>
+  const bodyElement = doc.body;
+  if (!bodyElement || bodyElement.childNodes.length === 0) {
+    return <></>;
+  }
 
-  return reactNode;
+  // Render the children of the body element instead of the body element itself
+  const reactNodes = [...bodyElement.childNodes].map((childNode, index) => (
+    <RenderReactNode
+      key={index}
+      selector={`0-${index}`}
+      node={childNode as any}
+      index={index}
+    />
+  ));
+
+  return <>{reactNodes}</>;
 }
 
 const RenderReactNode = React.memo(function ({
@@ -69,7 +78,7 @@ const RenderReactNode = React.memo(function ({
   index: number;
   selector: string;
 }): React.ReactElement {
-  const attributes: { [key: string]: string } = {
+  const attributes: { [key: string]: string; } = {
     'data-selector': selector,
   };
   node.getAttributeNames?.().forEach(att => {
@@ -81,7 +90,17 @@ const RenderReactNode = React.memo(function ({
   if (node.nodeType === Node.COMMENT_NODE) return <></>;
 
   if (node.nodeType === Node.TEXT_NODE) {
-    return <>{node.textContent}</>;
+    // Filter out whitespace-only text nodes to prevent hydration errors
+    const textContent = node.textContent || '';
+    const isWhitespaceOnly = /^\s*$/.test(textContent);
+
+    // Don't render whitespace-only text nodes as they can cause hydration errors
+    // especially when they're children of elements like <head>
+    if (isWhitespaceOnly) {
+      return <></>;
+    }
+
+    return <>{textContent}</>;
   }
 
   if (node.nodeType === Node.ELEMENT_NODE) {
@@ -123,13 +142,13 @@ const RenderReactNode = React.memo(function ({
         node.childNodes.length === 0
           ? null
           : [...node.childNodes].map((n, i) => (
-              <RenderReactNode
-                selector={getChildSelector(selector, i)}
-                key={i}
-                node={n as any}
-                index={i}
-              />
-            )),
+            <RenderReactNode
+              selector={getChildSelector(selector, i)}
+              key={i}
+              node={n as any}
+              index={i}
+            />
+          )),
     });
 
     return <>{reactNode}</>;
@@ -152,7 +171,7 @@ function createElement(
   type: string,
   props?: React.ClassAttributes<Element> & {
     style?: {} | undefined;
-    children?: JSX.Element[] | null;
+    children?: React.JSX.Element[] | null;
     key: string | number;
     tabIndex?: string;
     class?: string;

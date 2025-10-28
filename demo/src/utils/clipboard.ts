@@ -7,5 +7,5 @@ export function copy(text: string) {
   document.body.append(input);
   input.select();
   document.execCommand('Copy');
-  document.body.removeChild(input);
+  input.parentNode && input.parentNode.removeChild(input);
 }

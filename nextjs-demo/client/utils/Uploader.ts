@@ -53,7 +53,7 @@ export class Uploader {
     if (typeof document === "undefined") return {} as any;
     Array.from(document.querySelectorAll(".uploader-form-input")).forEach(
       (el) => {
-        el && document.body.removeChild(el);
+        el && el.parentNode && el.parentNode.removeChild(el);
       }
     );
     const el = document.createElement("input");
@@ -103,7 +103,7 @@ export class Uploader {
     this.handler.end.map((fn) => fn(uploadList));
   }
 
-  private async uploadFile(result: { file: File }) {
+  private async uploadFile(result: { file: File; }) {
     return this.uploadServer(result.file);
   }
 

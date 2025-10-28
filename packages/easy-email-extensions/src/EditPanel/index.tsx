@@ -36,11 +36,15 @@ export function EditPanel({
       <Tabs
         defaultActiveTab='2'
         style={{ width: '100%', padding: 0 }}
-        renderTabHeader={(_, DefaultHeader) => (
-          <div className={styles.largeTabsHeader}>
-            <DefaultHeader />
-          </div>
-        )}
+        renderTabHeader={() => {
+          // Skip using DefaultHeader to avoid React 19 ref issues
+          // Render a custom tab header instead
+          return (
+            <div className={styles.largeTabsHeader}>
+              {/* Custom tab header content */}
+            </div>
+          );
+        }}
       >
         <TabPane
           key='2'

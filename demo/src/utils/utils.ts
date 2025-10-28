@@ -54,7 +54,7 @@ export async function getImageFile(url: string) {
   const blob = await new Promise<Blob>((resolve) =>
     canvas.toBlob((blob) => resolve(blob!))
   );
-  canvas.parentNode!.removeChild(canvas);
+  canvas.parentNode && canvas.parentNode.removeChild(canvas);
   return blob;
 }
 

@@ -1,8 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["node", "jest"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -17,15 +24,23 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "sourceMap": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "lib",
     "baseUrl": ".",
     "paths": {
-      "@core": ["src"],
-      "@core/*": ["src/*"]
+      "@core": [
+        "src"
+      ],
+      "@core/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["./src"],
+  "include": [
+    "./src"
+  ],
   // "exclude": ["node_modules", "src/utils/__tests__"]
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

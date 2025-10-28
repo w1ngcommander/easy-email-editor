@@ -52,8 +52,8 @@
     "posthog-js": "^1.79.1",
     "query-string": "^8.1.0",
     "raw-loader": "^4.0.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "react-final-form": "^6.5.9",
     "react-markdown": "8.0.2",
     "react-use": "^17.4.0"
@@ -61,7 +61,7 @@
   "devDependencies": {
     "@types/next-auth": "3.13.0",
     "@types/node": "16.11.26",
-    "@types/react": "17.0.44",
+    "@types/react": "^19.2.0",
     "prisma": "4.2.0",
     "ts-node": "10.7.0",
     "typescript": "4.6.3"

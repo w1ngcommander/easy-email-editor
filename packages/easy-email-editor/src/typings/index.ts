@@ -1,3 +1,4 @@
+import React from 'react';
 import { IPage } from 'easy-email-core';
 
 export interface IEmailTemplate {
@@ -8,11 +9,11 @@ export interface IEmailTemplate {
 
 declare global {
   function t(key: string): string;
-  function t(key: string, placeholder: React.ReactNode): JSX.Element;
+  function t(key: string, placeholder: React.ReactNode): React.JSX.Element;
 
   interface Window {
     // translation
 
-    t: (key: string, placeholder?: React.ReactNode) => JSX.Element;
+    t: (key: string, placeholder?: React.ReactNode) => React.JSX.Element;
   }
 }

@@ -31,8 +31,8 @@ export default class TableOperationMenu {
 
   destroy() {
     this.domNode?.remove();
-    if (this.styleDom) {
-      document.head.removeChild(this.styleDom);
+    if (this.styleDom && this.styleDom.parentNode) {
+      this.styleDom.parentNode.removeChild(this.styleDom);
     }
     document.body.removeEventListener('click', this.hide.bind(this));
   }
@@ -66,7 +66,7 @@ export default class TableOperationMenu {
     );
   }
 
-  showMenu({ x, y }: { x: number; y: number }) {
+  showMenu({ x, y }: { x: number; y: number; }) {
     this.visible = true;
     const maxHeight = window.innerHeight;
     const maxWidth = window.innerWidth;

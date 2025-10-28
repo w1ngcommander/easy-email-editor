@@ -17,21 +17,21 @@ export const RecordContext = React.createContext<{
   undoable: boolean;
 }>({
   records: [],
-  redo: () => {},
-  undo: () => {},
-  reset: () => {},
+  redo: () => { },
+  undo: () => { },
+  reset: () => { },
   redoable: false,
   undoable: false,
 });
 
-export const RecordProvider: React.FC<{ children?: React.ReactNode }> = props => {
+export const RecordProvider: React.FC<{ children?: React.ReactNode; }> = props => {
   const formState = useFormState<IEmailTemplate>();
   const [data, setData] = useState<Array<IEmailTemplate>>([]);
   const [index, setIndex] = useState(-1);
   const indexRef = useRefState(index);
 
   const statusRef = useRef<RecordStatus>(undefined);
-  const currentData = useRef<IEmailTemplate>();
+  const currentData = useRef<IEmailTemplate | undefined>(undefined);
 
   if (index >= 0 && data.length > 0) {
     currentData.current = data[index];

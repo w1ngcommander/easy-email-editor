@@ -26,7 +26,7 @@ export async function emailToImage(content: IBlockData) {
     );
   });
 
-  document.body.removeChild(container);
+  container.parentNode && container.parentNode.removeChild(container);
 
   try {
     const picture = await services.common.uploadByQiniu(blob);

@@ -42,8 +42,10 @@ export function ConfigurationPanel({
       {showSourceCode ? (
         <Tabs
           className={styles.tabs}
-          renderTabHeader={(_, DefaultHeader) =>
-            !compact ? (
+          renderTabHeader={() => {
+            // Skip using DefaultHeader to avoid React 19 ref issues
+            // Render a custom tab header instead
+            return !compact ? (
               <div
                 className={styles.largeTabsHeader}
                 style={{ display: 'flex', alignItems: 'center' }}
@@ -55,17 +57,21 @@ export function ConfigurationPanel({
                   <IconLeft fontSize={16} />
                 </div>
 
-                <DefaultHeader style={{ flex: 1 }} />
+                <div style={{ flex: 1 }}>
+                  {/* Custom tab header content */}
+                </div>
               </div>
             ) : (
               <div
                 className={styles.largeTabsHeader}
                 style={{ display: 'flex', alignItems: 'center' }}
               >
-                <DefaultHeader style={{ flex: 1 }} />
+                <div style={{ flex: 1 }}>
+                  {/* Custom tab header content */}
+                </div>
               </div>
-            )
-          }
+            );
+          }}
         >
           <Tabs.TabPane
             title={

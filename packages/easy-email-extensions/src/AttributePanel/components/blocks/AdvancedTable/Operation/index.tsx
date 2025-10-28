@@ -12,9 +12,12 @@ export function TableOperation() {
   const bottomRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
-  const tool = useRef<TableColumnTool>();
+  const tool = useRef<TableColumnTool | undefined>(undefined);
 
   useEffect(() => {
+    const bodyElement = shadowRoot?.querySelector('body');
+    if (!bodyElement) return;
+
     const borderTool: any = {
       top: topRef.current,
       bottom: bottomRef.current,
@@ -23,12 +26,12 @@ export function TableOperation() {
     };
     tool.current = new TableColumnTool(
       borderTool,
-      shadowRoot.querySelector('body') as any,
+      bodyElement,
     );
     return () => {
       tool.current?.destroy();
     };
-  }, []);
+  }, [shadowRoot]);
 
   useEffect(() => {
     if (tool.current) {
@@ -39,9 +42,11 @@ export function TableOperation() {
     }
   }, [focusIdx, focusBlock]);
 
+  const bodyElement = shadowRoot?.querySelector('body');
+
   return (
     <>
-      {shadowRoot &&
+      {shadowRoot && bodyElement &&
         createPortal(
           <>
             <div>
@@ -51,7 +56,7 @@ export function TableOperation() {
               <div ref={rightRef} />
             </div>
           </>,
-          shadowRoot.querySelector('body') as any,
+          bodyElement,
         )}
     </>
   );

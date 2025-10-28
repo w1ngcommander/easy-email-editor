@@ -12,11 +12,25 @@ export function HtmlStringToPreviewReactNodes(
   content: string,
 ) {
   let doc = domParser.parseFromString(content, 'text/html'); // The average time is about 1.4 ms
-  const reactNode = (
-    <RenderReactNode selector={'0'} node={doc.documentElement} index={0} />
-  );
 
-  return reactNode;
+  // Instead of rendering the body element itself, render its children
+  // This prevents hydration errors where <body> would be a child of <div>
+  const bodyElement = doc.body;
+  if (!bodyElement || bodyElement.childNodes.length === 0) {
+    return <></>;
+  }
+
+  // Render the children of the body element instead of the body element itself
+  const reactNodes = [...bodyElement.childNodes].map((childNode, index) => (
+    <RenderReactNode
+      key={index}
+      selector={`0-${index}`}
+      node={childNode as any}
+      index={index}
+    />
+  ));
+
+  return <>{reactNodes}</>;
 }
 
 const RenderReactNode = React.memo(function ({
@@ -40,7 +54,17 @@ const RenderReactNode = React.memo(function ({
   if (node.nodeType === Node.COMMENT_NODE) return <></>;
 
   if (node.nodeType === Node.TEXT_NODE) {
-    return <>{node.textContent}</>;
+    // Filter out whitespace-only text nodes to prevent hydration errors
+    const textContent = node.textContent || '';
+    const isWhitespaceOnly = /^\s*$/.test(textContent);
+
+    // Don't render whitespace-only text nodes as they can cause hydration errors
+    // especially when they're children of elements like <head>
+    if (isWhitespaceOnly) {
+      return <></>;
+    }
+
+    return <>{textContent}</>;
   }
 
   if (node.nodeType === Node.ELEMENT_NODE) {
